@@ -1,0 +1,12 @@
+langchain
+transformers
+torch
+SpeechRecognition
+pyaudio
+pyttsx3
+gTTS
+playsound
+flask
+colorama
+dotenv
+sqlite3
