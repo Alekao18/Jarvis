@@ -7,8 +7,8 @@ import torch
 import transformers
 import pyaudio
 
-key_api = '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'
-os.environ ['GROQ_API_KEY'] = key_api
+jarvis_api = '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'
+os.environ ['GROQ_API_KEY'] = jarvis_api
 chat = ChatGroq(model='llama-3.3-70b-versatile')
 
 def jarvis(pergunta):
