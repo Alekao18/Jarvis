@@ -1,8 +1,11 @@
 # Arquivo principal do projeto
 
 import os
+import speech_recognition as sr
 from langchain_groq import ChatGroq
 from langchain.prompts import ChatPromptTemplate
+from gtts import gTTS
+import playsound
 import torch
 import transformers
 import pyaudio
@@ -10,6 +13,40 @@ import pyaudio
 jarvis_api = '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'
 os.environ ['GROQ_API_KEY'] = jarvis_api
 chat = ChatGroq(model='llama-3.3-70b-versatile')
+
+# Inicializa reconhecimento de voz
+reconhecedor = sr.Recognizer()
+
+def ouvir_jarvis():
+    with sr.Microphone() as source:
+        print('Jarvis ouvindo...')
+        reconhecedor.adjust_for_ambient_noise(source)
+        audio = reconhecedor.listen(source)
+    try:
+        comando = reconhecedor.recognize_amazon(audio)
+        print('Você quis dizer {comando}')
+        return comando
+    except sr.UnknownValueError:
+        print("Não entendi o que você disse.")
+        return ""
+    except sr.RequestError:
+        print("Erro na API de reconhecimento de voz.")
+        return ""
+
+def falar(texto):
+    tts = gTTS(text=texto, lang='pt-br')
+    tts.save("resposta.mp3")
+    playsound.playsound("resposta.mp3", True)
+
+while True:
+    comando = ouvir_jarvis()
+    if comando == 'desligar':
+        falar_respota = "Até mais!"
+        break
+    resposta = chat.invoke(str(comando)).content
+    falar(resposta)
+    print(f"Jarvis: {resposta}")
+        
 
 def jarvis(pergunta):
     try:
